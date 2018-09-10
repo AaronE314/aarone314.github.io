@@ -35,7 +35,7 @@ function drawLine(ctx, x, y, size) {
 
 function clearCanvas(canvas, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    document.getElementById('canvasarea').innerHTML = '';
+    document.getElementById('canvas').innerHTML = '';
 }
 
 function sketchpad_mouseDown() {
@@ -102,9 +102,9 @@ function getTouchPos(e) {
         let e = event;
     }
 
-    if (e.touches) {
-        if (e.touches.length == 1) {
-            let touch = e.touches[0];
+    if (e.changedTouches) {
+        if (e.changedTouches.length == 1) {
+            let touch = e.changedTouches[0];
             touchX = touch.pageX - touch.target.offsetLeft;
             touchY = touch.pageY - touch.target.offsetTop;
         }
@@ -130,7 +130,7 @@ async function init() {
         canvas.addEventListener('touchmove', sketchpad_mouseUp, false);
     }
 
-    model = await tf.loadModel('saved_models/model.json')
+    model = await tf.loadModel('../saved_models/model.json')
 }
 
 function predict() {
@@ -146,7 +146,7 @@ function predict() {
     const predictionValues = prediction.dataSync();
 
     let isThereAnyPrediction = false;
-    for (index = 0; index < predictedValues.length; index++) {
+    for (index = 0; index < predictionValues.length; index++) {
         if (predictionValues[index] > 0.5) {
             isThereAnyPrediction = true;
             document.getElementById('blankspace').innerHTML = '<br/>Predicted Number: ' + index;
